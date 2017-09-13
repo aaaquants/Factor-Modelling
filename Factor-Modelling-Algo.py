@@ -31,8 +31,8 @@ import quantopian.optimize as opt
 
 # Constraint Parameters
 MAX_GROSS_EXPOSURE = 1.0
-NUM_LONG_POSITIONS = 30
-NUM_SHORT_POSITIONS = 30
+NUM_LONG_POSITIONS = 300
+NUM_SHORT_POSITIONS = 300
 
 # Here we define the maximum position size that can be held for any
 # given stock. If you have a different idea of what these maximum
@@ -216,26 +216,22 @@ def rebalance(context, data):
     constraints.append(opt.DollarNeutral())
     # Add a sector neutrality constraint using the sector
     # classifier that we included in pipeline
-    '''
     constraints.append(
         opt.NetGroupExposure.with_equal_bounds(
             labels=pipeline_data.sector,
             min=-MAX_SECTOR_EXPOSURE,
             max=MAX_SECTOR_EXPOSURE,
         ))
-    '''
     # Take the risk factors that you extracted above and
     # list your desired max/min exposures to them -
     # Here we selection +/- 0.01 to remain near 0.
 
-    '''
     neutralize_risk_factors = opt.FactorExposure(
         loadings=risk_factor_exposures,
         min_exposures={'market_beta':-MAX_BETA_EXPOSURE},
         max_exposures={'market_beta':MAX_BETA_EXPOSURE}
     )
     constraints.append(neutralize_risk_factors)
-    '''
 
     # With this constraint we enforce that no position can make up
     # greater than MAX_SHORT_POSITION_SIZE on the short side and
